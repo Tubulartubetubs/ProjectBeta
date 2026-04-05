@@ -11,7 +11,7 @@ public class KnifeController : WeaponController
     protected override void Attack()
     {
         base.Attack();
-        GameObject spawnedKnife = Instantiate(weapon);
+        GameObject spawnedKnife = Instantiate(weaponStats.Weapon);
         spawnedKnife.transform.position = transform.position;
         spawnedKnife.GetComponent<KnifeBehavior>().DirectionChecker(playerMovement.lastMovedVector);
     }

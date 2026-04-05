@@ -3,12 +3,8 @@ using UnityEngine;
 public class WeaponController : MonoBehaviour
 {
     [Header("Weapon Stats")]
-    public GameObject weapon;
-    public float damage;
-    public float speed;
+    public WeaponScriptableObject weaponStats;
     float currCooldown;
-    public float maxCooldown;
-    public int pierce;
 
     protected PlayerMovement playerMovement;
 
@@ -16,7 +12,7 @@ public class WeaponController : MonoBehaviour
     protected virtual void Start()
     {
         playerMovement = FindFirstObjectByType<PlayerMovement>();
-        currCooldown = maxCooldown;
+        currCooldown = weaponStats.MaxCooldown;
     }
 
     // Update is called once per frame
@@ -30,6 +26,6 @@ public class WeaponController : MonoBehaviour
 
     protected virtual void Attack()
     {
-        currCooldown = maxCooldown;
+        currCooldown = weaponStats.MaxCooldown;
     }
 }
