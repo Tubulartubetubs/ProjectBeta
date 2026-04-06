@@ -7,12 +7,14 @@ public class WeaponController : MonoBehaviour
     float currCooldown;
 
     protected PlayerMovement playerMovement;
+    protected PlayerStats playerStats;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected virtual void Start()
     {
         playerMovement = FindFirstObjectByType<PlayerMovement>();
-        currCooldown = weaponStats.MaxCooldown;
+        playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+        currCooldown = weaponStats.MaxCooldown - playerStats.CurrCooldownReduction;
     }
 
     // Update is called once per frame
@@ -26,6 +28,6 @@ public class WeaponController : MonoBehaviour
 
     protected virtual void Attack()
     {
-        currCooldown = weaponStats.MaxCooldown;
+        currCooldown = weaponStats.MaxCooldown - playerStats.CurrCooldownReduction;
     }
 }

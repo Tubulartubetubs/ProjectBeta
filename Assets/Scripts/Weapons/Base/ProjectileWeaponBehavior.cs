@@ -4,6 +4,8 @@ public class ProjectileWeaponBehavior : MonoBehaviour
 {
     public WeaponScriptableObject weaponStats;
 
+    PlayerStats player;
+
     protected Vector3 direction;
     public float destroyAfterSeconds;
 
@@ -14,10 +16,11 @@ public class ProjectileWeaponBehavior : MonoBehaviour
 
     void Awake()
     {
-        currDamage = weaponStats.Damage;
-        currSpeed = weaponStats.Speed;
-        currMaxCooldown = weaponStats.MaxCooldown;
-        currPierce = weaponStats.Pierce;
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+        currDamage = weaponStats.Damage * player.CurrStrength;
+        currSpeed = weaponStats.Speed * player.CurrProjectileSpeed;
+        currMaxCooldown = weaponStats.MaxCooldown - player.CurrCooldownReduction;
+        currPierce = weaponStats.Pierce + player.CurrPierce;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -87,11 +90,22 @@ public class ProjectileWeaponBehavior : MonoBehaviour
         {
             EnemyStats enemyStats = collision.GetComponent<EnemyStats>();
             enemyStats.TakeDamage(currDamage);
-            currPierce--;
-            if (currPierce <= 0)
-            {
-                Destroy(gameObject);
-            }
+            ReducePierce();
+        }
+        else if(collision.CompareTag("Breakable"))
+        {
+            BreakableProps breakableProps = collision.GetComponent<BreakableProps>();
+            breakableProps.TakeDamage(currDamage);
+            ReducePierce();
+        }
+    }
+
+    private void ReducePierce()
+    {
+        currPierce--;
+        if (currPierce <= 0)
+        {
+            Destroy(gameObject);
         }
     }
 }

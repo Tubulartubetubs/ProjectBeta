@@ -5,6 +5,14 @@ public class PlayerMovement : MonoBehaviour
 {
     public Vector2 moveInput { get; private set; }
     public Vector2 lastMovedVector;
+
+    PlayerStats playerStats;
+
+    private void Start()
+    {
+        playerStats = GetComponent<PlayerStats>();
+    }
+
     private void OnMove(InputValue inputValue)
     {
         moveInput = inputValue.Get<Vector2>();

@@ -4,6 +4,8 @@ public class MeleeWeaponBehavior : MonoBehaviour
 {
     public WeaponScriptableObject weaponStats; // Reference to the weapon's stats
 
+    PlayerStats player; // Reference to the player's stats
+
     public float destroyAfterSeconds; // Time after which the weapon will be destroyed
 
     protected float currDamage; // Current damage of the weapon
@@ -13,11 +15,13 @@ public class MeleeWeaponBehavior : MonoBehaviour
 
     private void Awake()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
+
         // Initialize the weapon's current stats based on the scriptable object
-        currDamage = weaponStats.Damage;
-        currSpeed = weaponStats.Speed;
-        currMaxCooldown = weaponStats.MaxCooldown;
-        currPierce = weaponStats.Pierce;
+        currDamage = weaponStats.Damage * player.CurrStrength;
+        currSpeed = weaponStats.Speed * player.CurrProjectileSpeed;
+        currMaxCooldown = weaponStats.MaxCooldown - player.CurrCooldownReduction;
+        currPierce = weaponStats.Pierce + player.CurrPierce;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,6 +36,11 @@ public class MeleeWeaponBehavior : MonoBehaviour
         {
             EnemyStats enemyStats = collision.GetComponent<EnemyStats>();
             enemyStats.TakeDamage(currDamage);
+        }
+        else if (collision.CompareTag("Breakable"))
+        {
+            BreakableProps breakableProps = collision.GetComponent<BreakableProps>();
+            breakableProps.TakeDamage(currDamage);
         }
     }
 }
