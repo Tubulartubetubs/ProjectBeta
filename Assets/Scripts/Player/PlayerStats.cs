@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour
 {
 
-    public CharacterScriptableObject characterStats;
+    CharacterScriptableObject characterStats;
 
     float currHealth;
     float currRegen;
@@ -15,6 +15,9 @@ public class PlayerStats : MonoBehaviour
     float currCollectionRadius;
     float currCooldownReduction;
     int currPierce;
+
+    //spawned weapons
+    public List<GameObject> spawnedWeapons;
 
     //xp
     [Header("XP/Level")]
@@ -48,6 +51,9 @@ public class PlayerStats : MonoBehaviour
 
     private void Awake()
     {
+        characterStats = CharacterSelector.GetData();
+        CharacterSelector.instance.DestroySingleton();
+
         CurrHealth = characterStats.MaxHealth-10;
         CurrCollectionRadius = characterStats.CollectionRadius;
         CurrRegen = characterStats.Regen;
@@ -57,6 +63,8 @@ public class PlayerStats : MonoBehaviour
         CurrCollectionRadius = characterStats.CollectionRadius;
         CurrCooldownReduction = characterStats.CooldownReduction;
         CurrPierce = characterStats.Pierce;
+
+        SpawnWeapon(characterStats.StartingWeapon);
     }
 
     void Start()
@@ -148,5 +156,12 @@ public class PlayerStats : MonoBehaviour
             {
                 CurrHealth = characterStats.MaxHealth;
             }
+    }
+
+    public void SpawnWeapon(GameObject weaponPrefab)
+    {
+        GameObject weapon = Instantiate(weaponPrefab, transform.position, Quaternion.identity);
+        weapon.transform.SetParent(transform);
+        spawnedWeapons.Add(weapon);
     }
 }

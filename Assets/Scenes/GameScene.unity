@@ -1200,7 +1200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d2dd7a1b100ac54da983ba18f8fb137, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
-  characterStats: {fileID: 11400000, guid: 0ad155961c72c50429e203bb7fe495ca, type: 2}
+  characterStats: {fileID: 0}
   exp: 0
   level: 1
   expToNextLevel: 0
